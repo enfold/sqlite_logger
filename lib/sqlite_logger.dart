@@ -10,7 +10,7 @@ import '/db.dart';
 class LogManager {
   static final LogManager _instance = LogManager._internal();
 
-  late final DBLogRecordDatabase? _db;
+  late final LogMessageDatabase? _db;
   final _log = Logger('$LogManager');
   StreamSubscription<LogRecord>? _sub;
 
@@ -20,7 +20,7 @@ class LogManager {
   }
 
   LogManager.testing() {
-    _db = DBLogRecordDatabase.testing(VmDatabase.memory());
+    _db = LogMessageDatabase.testing(VmDatabase.memory());
   }
 
   LogManager._internal();
@@ -28,7 +28,7 @@ class LogManager {
   //Connects to the sqlite database passed to the function. Make sure to keep track of where your db is stored as
   //this method doesnt save its location.
   void connect(File file) {
-    _db = DBLogRecordDatabase(file);
+    _db = LogMessageDatabase(file);
   }
 
   //Starts listening to log events saving them to the logs database. Make sure to call connect(file) before listening to logs output.
@@ -62,32 +62,32 @@ class LogManager {
   Future<void> deleteLogsBefore(DateTime time) =>
       _getDBInstance().deleteBefore(time.millisecondsSinceEpoch);
 
-  Future<List<DBLogRecord>> getAllLogs() => _getDBInstance().getAllLogs;
+  Future<List<LogMessage>> getAllLogs() => _getDBInstance().getAllLogs;
 
-  DBLogRecordDatabase _getDBInstance() {
+  LogMessageDatabase _getDBInstance() {
     return _db == null ? throw DatabaseConnectionException() : _db!;
   }
 
-  Future<List<DBLogRecord>> getLogById(int id) =>
+  Future<List<LogMessage>> getLogById(int id) =>
       _getDBInstance().getLogById(id);
 
   //This returns null if you pass it an empty string
-  Future<List<DBLogRecord>>? getLogWhereMessageContains(String s) =>
+  Future<List<LogMessage>>? getLogWhereMessageContains(String s) =>
       s.isNotEmpty ? _getDBInstance().getLogWhereMessageContains(s) : null;
 
-  Future<List<DBLogRecord>> getLogsAfter(DateTime dateTime) =>
+  Future<List<LogMessage>> getLogsAfter(DateTime dateTime) =>
       _getDBInstance().getLogsAfter(dateTime.millisecondsSinceEpoch);
 
-  Future<List<DBLogRecord>> getLogsBefore(DateTime dateTime) =>
+  Future<List<LogMessage>> getLogsBefore(DateTime dateTime) =>
       _getDBInstance().getLogsBefore(dateTime.millisecondsSinceEpoch);
 
-  Future<List<DBLogRecord>> getLogsByLevel(Level level) =>
+  Future<List<LogMessage>> getLogsByLevel(Level level) =>
       _getDBInstance().getLogsByLevel(level.value);
 
-  Future<List<DBLogRecord>> getLogsByName(String name) =>
+  Future<List<LogMessage>> getLogsByName(String name) =>
       _getDBInstance().getLogsByName(name);
 
-  Future<List<DBLogRecord>> getLogsNameContains(String s) =>
+  Future<List<LogMessage>> getLogsNameContains(String s) =>
       _getDBInstance().getLogsNameContains(s);
 
   Future<void> truncateLogs(Duration duration) {

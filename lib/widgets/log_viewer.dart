@@ -20,7 +20,7 @@ class LogViewer extends StatefulWidget {
 class _LogViewerState extends State<LogViewer> {
   late final LogManager _logManager;
   final _controller = RefreshController(initialRefresh: false);
-  var _logs = <DBLogRecord>[];
+  var _logs = <LogMessage>[];
   final levelReverseMap = {
     for (final level in Level.LEVELS) level.value: level.name
   };
@@ -32,7 +32,7 @@ class _LogViewerState extends State<LogViewer> {
     _logManager.getAllLogs().then((value) => _setLogState(value));
   }
 
-  void _setLogState(List<DBLogRecord> logState) {
+  void _setLogState(List<LogMessage> logState) {
     logState.sort((a, b) => b.time.compareTo(a.time));
     setState(() {
       _logs = logState;
