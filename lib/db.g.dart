@@ -7,7 +7,7 @@ part of 'db.dart';
 // **************************************************************************
 
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
-class Log extends DataClass implements Insertable<Log> {
+class DBLogRecord extends DataClass implements Insertable<DBLogRecord> {
   final int id;
   final String name;
   final int time;
@@ -15,7 +15,7 @@ class Log extends DataClass implements Insertable<Log> {
   final int level;
   final String error;
   final String stack;
-  Log(
+  DBLogRecord(
       {required this.id,
       required this.name,
       required this.time,
@@ -23,10 +23,10 @@ class Log extends DataClass implements Insertable<Log> {
       required this.level,
       required this.error,
       required this.stack});
-  factory Log.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+  factory DBLogRecord.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    return Log(
+    return DBLogRecord(
       id: const IntType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
       name: const StringType()
@@ -56,8 +56,8 @@ class Log extends DataClass implements Insertable<Log> {
     return map;
   }
 
-  LogTableCompanion toCompanion(bool nullToAbsent) {
-    return LogTableCompanion(
+  DBLogRecordTableCompanion toCompanion(bool nullToAbsent) {
+    return DBLogRecordTableCompanion(
       id: Value(id),
       name: Value(name),
       time: Value(time),
@@ -68,10 +68,10 @@ class Log extends DataClass implements Insertable<Log> {
     );
   }
 
-  factory Log.fromJson(Map<String, dynamic> json,
+  factory DBLogRecord.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return Log(
+    return DBLogRecord(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       time: serializer.fromJson<int>(json['time']),
@@ -95,7 +95,7 @@ class Log extends DataClass implements Insertable<Log> {
     };
   }
 
-  Log copyWith(
+  DBLogRecord copyWith(
           {int? id,
           String? name,
           int? time,
@@ -103,7 +103,7 @@ class Log extends DataClass implements Insertable<Log> {
           int? level,
           String? error,
           String? stack}) =>
-      Log(
+      DBLogRecord(
         id: id ?? this.id,
         name: name ?? this.name,
         time: time ?? this.time,
@@ -114,7 +114,7 @@ class Log extends DataClass implements Insertable<Log> {
       );
   @override
   String toString() {
-    return (StringBuffer('Log(')
+    return (StringBuffer('DBLogRecord(')
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('time: $time, ')
@@ -140,7 +140,7 @@ class Log extends DataClass implements Insertable<Log> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Log &&
+      (other is DBLogRecord &&
           other.id == this.id &&
           other.name == this.name &&
           other.time == this.time &&
@@ -150,7 +150,7 @@ class Log extends DataClass implements Insertable<Log> {
           other.stack == this.stack);
 }
 
-class LogTableCompanion extends UpdateCompanion<Log> {
+class DBLogRecordTableCompanion extends UpdateCompanion<DBLogRecord> {
   final Value<int> id;
   final Value<String> name;
   final Value<int> time;
@@ -158,7 +158,7 @@ class LogTableCompanion extends UpdateCompanion<Log> {
   final Value<int> level;
   final Value<String> error;
   final Value<String> stack;
-  const LogTableCompanion({
+  const DBLogRecordTableCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.time = const Value.absent(),
@@ -167,7 +167,7 @@ class LogTableCompanion extends UpdateCompanion<Log> {
     this.error = const Value.absent(),
     this.stack = const Value.absent(),
   });
-  LogTableCompanion.insert({
+  DBLogRecordTableCompanion.insert({
     this.id = const Value.absent(),
     required String name,
     required int time,
@@ -181,7 +181,7 @@ class LogTableCompanion extends UpdateCompanion<Log> {
         level = Value(level),
         error = Value(error),
         stack = Value(stack);
-  static Insertable<Log> custom({
+  static Insertable<DBLogRecord> custom({
     Expression<int>? id,
     Expression<String>? name,
     Expression<int>? time,
@@ -201,7 +201,7 @@ class LogTableCompanion extends UpdateCompanion<Log> {
     });
   }
 
-  LogTableCompanion copyWith(
+  DBLogRecordTableCompanion copyWith(
       {Value<int>? id,
       Value<String>? name,
       Value<int>? time,
@@ -209,7 +209,7 @@ class LogTableCompanion extends UpdateCompanion<Log> {
       Value<int>? level,
       Value<String>? error,
       Value<String>? stack}) {
-    return LogTableCompanion(
+    return DBLogRecordTableCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       time: time ?? this.time,
@@ -249,7 +249,7 @@ class LogTableCompanion extends UpdateCompanion<Log> {
 
   @override
   String toString() {
-    return (StringBuffer('LogTableCompanion(')
+    return (StringBuffer('DBLogRecordTableCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('time: $time, ')
@@ -262,10 +262,11 @@ class LogTableCompanion extends UpdateCompanion<Log> {
   }
 }
 
-class $LogTableTable extends LogTable with TableInfo<$LogTableTable, Log> {
+class $DBLogRecordTableTable extends DBLogRecordTable
+    with TableInfo<$DBLogRecordTableTable, DBLogRecord> {
   final GeneratedDatabase _db;
   final String? _alias;
-  $LogTableTable(this._db, [this._alias]);
+  $DBLogRecordTableTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
       'id', aliasedName, false,
@@ -300,11 +301,11 @@ class $LogTableTable extends LogTable with TableInfo<$LogTableTable, Log> {
   List<GeneratedColumn> get $columns =>
       [id, name, time, message, level, error, stack];
   @override
-  String get aliasedName => _alias ?? 'log_table';
+  String get aliasedName => _alias ?? 'd_b_log_record_table';
   @override
-  String get actualTableName => 'log_table';
+  String get actualTableName => 'd_b_log_record_table';
   @override
-  VerificationContext validateIntegrity(Insertable<Log> instance,
+  VerificationContext validateIntegrity(Insertable<DBLogRecord> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -353,22 +354,24 @@ class $LogTableTable extends LogTable with TableInfo<$LogTableTable, Log> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Log map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Log.fromData(data, _db,
+  DBLogRecord map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return DBLogRecord.fromData(data, _db,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
-  $LogTableTable createAlias(String alias) {
-    return $LogTableTable(_db, alias);
+  $DBLogRecordTableTable createAlias(String alias) {
+    return $DBLogRecordTableTable(_db, alias);
   }
 }
 
-abstract class _$LogDatabase extends GeneratedDatabase {
-  _$LogDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
-  late final $LogTableTable logTable = $LogTableTable(this);
+abstract class _$DBLogRecordDatabase extends GeneratedDatabase {
+  _$DBLogRecordDatabase(QueryExecutor e)
+      : super(SqlTypeSystem.defaultInstance, e);
+  late final $DBLogRecordTableTable dBLogRecordTable =
+      $DBLogRecordTableTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [logTable];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [dBLogRecordTable];
 }

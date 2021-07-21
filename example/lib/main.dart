@@ -10,7 +10,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:sqlite_logger/sqlite_logger.dart';
 import 'package:sqlite_logger/widgets/log_viewer.dart';
 
-import '/randon_log.dart';
+import 'package:example/randon_log.dart';
 
 void main() {
   runApp(const MyApp());
