@@ -6,10 +6,10 @@ import 'package:sqlite_logger/sqlite_logger.dart';
 import 'package:moor/ffi.dart';
 
 void main() {
-  late DBLogRecordDatabase db;
+  late LogMessageDatabase db;
 
   setUp(() {
-    db = DBLogRecordDatabase.testing(VmDatabase.memory());
+    db = LogMessageDatabase.testing(VmDatabase.memory());
   });
 
   tearDown(() async {

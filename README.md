@@ -67,6 +67,7 @@ final logManager = LogManager();
 logManager.connect(file);
 //Call start to begin listening for logEvents and save them to the database.
 logManager.start();
+}
 
  @override
   void dispose() {
@@ -74,7 +75,7 @@ logManager.start();
     logManager.stop();
     super.dispose();
   }
-}
+
 ```
 
 There are a number of ways to view and access the logs saves to the sqlite database. One is 
