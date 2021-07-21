@@ -10,7 +10,7 @@ import '/db.dart';
 class LogManager {
   static final LogManager _instance = LogManager._internal();
 
-  late final LogMessageDatabase? _db;
+  LogMessageDatabase? _db;
   final _log = Logger('$LogManager');
   StreamSubscription<LogRecord>? _sub;
 

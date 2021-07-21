@@ -80,8 +80,8 @@ logManager.start();
 
 There are a number of ways to view and access the logs saves to the sqlite database. One is 
 to simply query the database usng the same logManager that was used above. LogManager comes
-with a number of query methods. Keep in mind when querying that none of the data returned is 
-sorted so you must sort the List yourself.
+with a number of query methods. Keep in mind when querying that the data returned is sorted 
+by database id so you must sort the List yourself if you're looking for anything else.
 
 Example:
 
@@ -111,3 +111,34 @@ Example:
     );
   }
 ```
+
+## TODO 
+ The horizon is full of possibilities 
+
+- Launch DB in a seperate isolate
+
+- Add coby log button 
+- Add a search bar
+- Add a filter list by option
+- trace formatter
+
+Trevor - Feature Idea - 
+- export the logging database as JSON so it could be saved serverside.
+
+Alan testing advice.
+
+  - test/sqlite_logger_test.dart
+
+    - I do not see a test of exceptions / stacktrace
+
+    - I dont see a failure case of catching exception if you attempt to grab the LogManager
+
+      by the wrong end (note you have a lot of exceptions being thrown)
+
+    - I would expect the following tests:
+
+      - Attempting to use the LogManager without initializing
+
+      - Attempting to use the LogManager after cancel but did not connect
+
+      - Whatever dispose client logic is needed

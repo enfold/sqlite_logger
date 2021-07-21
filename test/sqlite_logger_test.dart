@@ -16,6 +16,17 @@ void main() {
     await db.close();
   });
 
+  test('logManager exceptions', () {
+    final logManager = LogManager();
+    var result;
+    try {
+      logManager.getAllLogs();
+    } catch (e) {
+      result = e;
+    }
+    expect(result is DatabaseConnectionException, true);
+  });
+
   test('listen test', () async {
     Logger.root.level = Level.ALL;
     const logName = 'Testing';
