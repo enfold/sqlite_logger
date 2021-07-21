@@ -6,8 +6,8 @@ import 'package:moor/moor.dart';
 
 part 'db.g.dart';
 
-@DataClassName('Log')
-class LogTable extends Table {
+@DataClassName('DBLogRecord')
+class DBLogRecordTable extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text()();
   IntColumn get time => integer()();
@@ -17,16 +17,16 @@ class LogTable extends Table {
   TextColumn get stack => text()();
 }
 
-@UseMoor(tables: [LogTable])
-class LogDatabase extends _$LogDatabase {
+@UseMoor(tables: [DBLogRecordTable])
+class DBLogRecordDatabase extends _$DBLogRecordDatabase {
   File? dbFile;
-  LogDatabase(this.dbFile) : super(_openConnection(dbFile!));
-  LogDatabase.testing(QueryExecutor e) : super(e);
+  DBLogRecordDatabase(this.dbFile) : super(_openConnection(dbFile!));
+  DBLogRecordDatabase.testing(QueryExecutor e) : super(e);
 
   @override
   int get schemaVersion => 1;
 
-  static final _log = Logger("$LogDatabase");
+  static final _log = Logger("$DBLogRecordDatabase");
 
   static LazyDatabase _openConnection(File file) {
     return LazyDatabase(() async {
@@ -40,49 +40,49 @@ class LogDatabase extends _$LogDatabase {
         _log.fine('executed PRAGMA statements');
       });
 
-  Future<List<Log>> get getAllLogs => select(logTable).get();
+  Future<List<DBLogRecord>> get getAllLogs => select(dBLogRecordTable).get();
 
-  Future<List<Log>> getLogById(int id) =>
-      (select(logTable)..where((tbl) => tbl.id.equals(id))).get();
+  Future<List<DBLogRecord>> getLogById(int id) =>
+      (select(dBLogRecordTable)..where((tbl) => tbl.id.equals(id))).get();
 
-  Future<List<Log>> getLogsByName(String name) =>
-      (select(logTable)..where((tbl) => tbl.name.equals(name))).get();
+  Future<List<DBLogRecord>> getLogsByName(String name) =>
+      (select(dBLogRecordTable)..where((tbl) => tbl.name.equals(name))).get();
 
-  Future<List<Log>> getLogsNameContains(String name) =>
-      (select(logTable)..where((tbl) => tbl.name.contains(name))).get();
+  Future<List<DBLogRecord>> getLogsNameContains(String name) =>
+      (select(dBLogRecordTable)..where((tbl) => tbl.name.contains(name))).get();
 
-  Future<List<Log>> getLogsByLevel(int level) =>
-      (select(logTable)..where((tbl) => tbl.level.equals(level))).get();
+  Future<List<DBLogRecord>> getLogsByLevel(int level) =>
+      (select(dBLogRecordTable)..where((tbl) => tbl.level.equals(level))).get();
 
-  Future<List<Log>> getLogsBefore(int time) =>
-      (select(logTable)..where((tbl) => tbl.time.isSmallerThanValue(time)))
-          .get();
+  Future<List<DBLogRecord>> getLogsBefore(int time) => (select(dBLogRecordTable)
+        ..where((tbl) => tbl.time.isSmallerThanValue(time)))
+      .get();
 
-  Future<List<Log>> getLogsAfter(int time) =>
-      (select(logTable)..where((tbl) => tbl.time.isBiggerThanValue(time)))
-          .get();
+  Future<List<DBLogRecord>> getLogsAfter(int time) => (select(dBLogRecordTable)
+        ..where((tbl) => tbl.time.isBiggerThanValue(time)))
+      .get();
 
-  Future<List<Log>> getLogWhereMessageContains(String s) =>
-      (select(logTable)..where((tbl) => tbl.message.contains(s))).get();
+  Future<List<DBLogRecord>> getLogWhereMessageContains(String s) =>
+      (select(dBLogRecordTable)..where((tbl) => tbl.message.contains(s))).get();
 
   Future<int> addLog(int time, String name, String message, int level,
       String error, String stack) {
-    var entry = LogTableCompanion.insert(
+    var entry = DBLogRecordTableCompanion.insert(
         time: time,
         name: name,
         message: message,
         level: level,
         error: error,
         stack: stack);
-    return into(logTable).insert(entry);
+    return into(dBLogRecordTable).insert(entry);
   }
 
-  List<Future<int>> addAllLogs(List<Log> logList) =>
-      [for (final log in logList) into(logTable).insert(log)];
+  List<Future<int>> addAllLogs(List<DBLogRecord> logList) =>
+      [for (final log in logList) into(dBLogRecordTable).insert(log)];
 
-  Future<void> deleteBefore(int time) =>
-      (delete(logTable)..where((tbl) => tbl.time.isSmallerThanValue(time)))
-          .go();
+  Future<void> deleteBefore(int time) => (delete(dBLogRecordTable)
+        ..where((tbl) => tbl.time.isSmallerThanValue(time)))
+      .go();
 
-  Future<void> deleteAllLogs() => delete(logTable).go();
+  Future<void> deleteAllLogs() => delete(dBLogRecordTable).go();
 }
