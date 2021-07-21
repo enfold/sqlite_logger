@@ -48,56 +48,47 @@ class LogManager {
     await _sub?.cancel();
   }
 
-  Future<void> addLog(LogRecord log) => _db != null
-      ? _db!.addLog(
-          log.time.millisecondsSinceEpoch,
-          log.loggerName,
-          log.message,
-          log.level.value,
-          log.error != null ? log.error.toString() : '',
-          log.stackTrace != null ? log.stackTrace.toString() : '',
-        )
-      : throw DatabaseConnectionException();
+  Future<void> addLog(LogRecord log) => _getDBInstance().addLog(
+        log.time.millisecondsSinceEpoch,
+        log.loggerName,
+        log.message,
+        log.level.value,
+        log.error != null ? log.error.toString() : '',
+        log.stackTrace != null ? log.stackTrace.toString() : '',
+      );
 
-  Future<void> deleteAllLogs() =>
-      _db == null ? throw DatabaseConnectionException() : _db!.deleteAllLogs();
+  Future<void> deleteAllLogs() => _getDBInstance().deleteAllLogs();
 
-  Future<void> deleteLogsBefore(DateTime time) => _db == null
-      ? throw DatabaseConnectionException()
-      : _db!.deleteBefore(time.millisecondsSinceEpoch);
+  Future<void> deleteLogsBefore(DateTime time) =>
+      _getDBInstance().deleteBefore(time.millisecondsSinceEpoch);
 
-  Future<List<DBLogRecord>> getAllLogs() =>
-      _db == null ? throw DatabaseConnectionException() : _db!.getAllLogs;
+  Future<List<DBLogRecord>> getAllLogs() => _getDBInstance().getAllLogs;
+
+  DBLogRecordDatabase _getDBInstance() {
+    return _db == null ? throw DatabaseConnectionException() : _db!;
+  }
 
   Future<List<DBLogRecord>> getLogById(int id) =>
-      _db == null ? throw DatabaseConnectionException() : _db!.getLogById(id);
+      _getDBInstance().getLogById(id);
 
   //This returns null if you pass it an empty string
-  Future<List<DBLogRecord>>? getLogWhereMessageContains(String s) => _db == null
-      ? throw DatabaseConnectionException()
-      : s.isNotEmpty
-          ? _db!.getLogWhereMessageContains(s)
-          : null;
+  Future<List<DBLogRecord>>? getLogWhereMessageContains(String s) =>
+      s.isNotEmpty ? _getDBInstance().getLogWhereMessageContains(s) : null;
 
-  Future<List<DBLogRecord>> getLogsAfter(DateTime dateTime) => _db == null
-      ? throw DatabaseConnectionException()
-      : _db!.getLogsAfter(dateTime.millisecondsSinceEpoch);
+  Future<List<DBLogRecord>> getLogsAfter(DateTime dateTime) =>
+      _getDBInstance().getLogsAfter(dateTime.millisecondsSinceEpoch);
 
-  Future<List<DBLogRecord>> getLogsBefore(DateTime dateTime) => _db == null
-      ? throw DatabaseConnectionException()
-      : _db!.getLogsBefore(dateTime.millisecondsSinceEpoch);
+  Future<List<DBLogRecord>> getLogsBefore(DateTime dateTime) =>
+      _getDBInstance().getLogsBefore(dateTime.millisecondsSinceEpoch);
 
-  Future<List<DBLogRecord>> getLogsByLevel(Level level) => _db == null
-      ? throw DatabaseConnectionException()
-      : _db!.getLogsByLevel(level.value);
+  Future<List<DBLogRecord>> getLogsByLevel(Level level) =>
+      _getDBInstance().getLogsByLevel(level.value);
 
-  Future<List<DBLogRecord>> getLogsByName(String name) => _db == null
-      ? throw DatabaseConnectionException()
-      : _db!.getLogsByName(name);
+  Future<List<DBLogRecord>> getLogsByName(String name) =>
+      _getDBInstance().getLogsByName(name);
 
-  Future<List<DBLogRecord>> getLogsNameContains(String s) => _db == null
-      ? throw DatabaseConnectionException()
-      : _db!.getLogsNameContains(s);
+  Future<List<DBLogRecord>> getLogsNameContains(String s) =>
+      _getDBInstance().getLogsNameContains(s);
 
   Future<void> truncateLogs(Duration duration) {
     if (_db == null) {
