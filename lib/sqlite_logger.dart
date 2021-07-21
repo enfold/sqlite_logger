@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:logging/logging.dart';
-import 'package:moor/ffi.dart';
 
 import '/db.dart';
 
@@ -19,8 +18,8 @@ class LogManager {
     return _instance;
   }
 
-  LogManager.testing() {
-    _db = LogMessageDatabase.testing(VmDatabase.memory());
+  LogManager.testing(LogMessageDatabase db) {
+    _db = db;
   }
 
   LogManager._internal();

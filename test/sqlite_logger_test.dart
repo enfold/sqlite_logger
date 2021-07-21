@@ -18,7 +18,7 @@ void main() {
 
   test('logManager exceptions', () {
     final logManager = LogManager();
-    var result;
+    Object? result;
     try {
       logManager.getAllLogs();
     } catch (e) {
@@ -31,7 +31,7 @@ void main() {
     Logger.root.level = Level.ALL;
     const logName = 'Testing';
     const message = 'Test of listener';
-    final logManger = LogManager.testing();
+    final logManger = LogManager.testing(db);
     final logger = Logger(logName);
     logManger.start();
     logger.log(Level.ALL, message);
@@ -59,5 +59,18 @@ void main() {
     await db.deleteAllLogs();
     final result = await db.getAllLogs;
     expect(result.length, 0);
+  });
+
+  test('Accessing LogManager after stop()', () {
+    final logManager = LogManager();
+    logManager.stop();
+    Object? result;
+    try {
+      logManager.getAllLogs();
+    } catch (e) {
+      result = e;
+    }
+
+    expect(result is DatabaseConnectionException, true);
   });
 }

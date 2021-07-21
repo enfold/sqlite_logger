@@ -125,7 +125,8 @@ Example:
 Trevor - Feature Idea - 
 - export the logging database as JSON so it could be saved serverside.
 
-Alan testing advice.
+Alan testing advice. - UPDATE: 7/21/20 - 1:19pm -Trevor: Added Most of these 
+tests
 
   - test/sqlite_logger_test.dart
 
