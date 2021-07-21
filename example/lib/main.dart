@@ -7,8 +7,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:logging/logging.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import 'package:logs_db/logs_db.dart';
-import 'package:logs_db/widgets/log_viewer.dart';
+import 'package:sqlite_logger/sqlite_logger.dart';
+import 'package:sqlite_logger/widgets/log_viewer.dart';
 
 import '/randon_log.dart';
 

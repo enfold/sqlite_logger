@@ -1,4 +1,4 @@
-name: logs_db
+name: sqlite_logger
 description: A new Flutter package project.
 version: 0.0.1
 homepage:

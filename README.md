@@ -1,4 +1,4 @@
-# logs_db
+# sqlite_logger
 
 A Flutter package for saving all your logs to a database and view them in a Widget.
 
@@ -28,7 +28,7 @@ First of all add this package as a dependency by adding this to your pubspec.yam
 
 ```yaml
 dependencies:
-    logs_db: {$github_path}
+    sqlite_logger: {$github_path}
 ```
 
 Now we can use the LogManger. If you havent already created a .sqlite file to hold the 
@@ -48,7 +48,7 @@ File file;
   void initFile(Directory dir) async {
     file = await File(p.join(dir.path, 'db.splite')).create();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('logs_db_path', file.path);
+    await prefs.setString('logging_db_path', file.path);
   }
 ```
 

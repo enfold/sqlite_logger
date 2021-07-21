@@ -4,7 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:logging/logging.dart';
 
-import '/logs_db.dart';
+import '../sqlite_logger.dart';
 import '/db.dart';
 
 //Widget for viewing logs stored in the passed log database file.

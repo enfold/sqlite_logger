@@ -452,13 +452,13 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "logs_db",
+      "name": "sqlite_logger",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-07-21T15:11:11.108558Z",
+  "generated": "2021-07-21T15:33:02.187487Z",
   "generator": "pub",
   "generatorVersion": "2.13.4"
 }

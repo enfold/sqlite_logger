@@ -23,7 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  logs_db:
+  sqlite_logger:
     path: ".."
   logging: ^1.0.1
   path_provider: ^2.0.2
