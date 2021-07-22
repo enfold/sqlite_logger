@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:logging/logging.dart';
 
@@ -59,6 +61,23 @@ void main() {
     await db.deleteAllLogs();
     final result = await db.getAllLogs;
     expect(result.length, 0);
+  });
+
+  test('log exception', () async {
+    String? nullString;
+    final logManager = LogManager.testing(db);
+    logManager.start();
+    final logger = Logger('log exception test');
+
+    try {
+      nullString!.trim();
+    } catch (e, stacktrace) {
+      logger.severe('String cannot be null', e, stacktrace);
+    }
+
+    final logMessageList = await logManager.getLogsByName('log exception test');
+    final logMessage = logMessageList[0];
+    expect(logMessage.error.isNotEmpty && logMessage.stack.isNotEmpty, true);
   });
 
   test('Accessing LogManager after stop()', () {
