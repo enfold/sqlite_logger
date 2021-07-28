@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:logging/logging.dart';
-
 import '../sqlite_logger.dart';
 import '/db.dart';
 
 //Widget for viewing logs stored in the passed log database file.
 class LogViewer extends StatefulWidget {
   final LogManager _logManager;
-
   const LogViewer(this._logManager, {Key? key}) : super(key: key);
-
   @override
   _LogViewerState createState() => _LogViewerState();
 }
@@ -24,7 +20,6 @@ class _LogViewerState extends State<LogViewer> {
   final levelReverseMap = {
     for (final level in Level.LEVELS) level.value: level.name
   };
-
   @override
   void initState() {
     super.initState();
@@ -78,12 +73,14 @@ class _LogViewerState extends State<LogViewer> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        Padding(
-          child: Text(
-            value,
-            overflow: TextOverflow.ellipsis,
+        Expanded(
+          child: Padding(
+            child: Text(
+              value,
+              overflow: TextOverflow.ellipsis,
+            ),
+            padding: itemPadding,
           ),
-          padding: itemPadding,
         )
       ],
     );
@@ -93,69 +90,84 @@ class _LogViewerState extends State<LogViewer> {
     final _log = _logs[index];
     const itemPadding = EdgeInsets.all(2);
     return Card(
-        child: Row(children: [
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          lineItem('Name: ', _log.name),
-          lineItem('Time: ',
-              dateFormatter(DateTime.fromMillisecondsSinceEpoch(_log.time))),
-          lineItem('Level: ', levelReverseMap[_log.level]!),
-          lineItem('Message: ', _log.message),
-          lineItem('Error: ', _log.error.isEmpty ? 'No' : 'Yes'),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 5,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  lineItem('Name: ', _log.name),
+                  lineItem(
+                      'Time: ',
+                      dateFormatter(
+                          DateTime.fromMillisecondsSinceEpoch(_log.time))),
+                  lineItem('Level: ', levelReverseMap[_log.level]!),
+                  lineItem('Message: ', _log.message),
+                  lineItem('Error: ', _log.error.isEmpty ? 'No' : 'Yes'),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: itemPadding,
+                  child: TextButton(
+                    onPressed: () => expandLog(index),
+                    child: const Icon(Icons.more_horiz),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
-      Expanded(
-          child: Align(
-        alignment: Alignment.centerRight,
-        child: Padding(
-            padding: itemPadding,
-            child: TextButton(
-                onPressed: () => expandLog(index),
-                child: const Icon(Icons.more_horiz))),
-      ))
-    ]));
+    );
   }
 
   void expandLog(int index) async {
     final _log = _logs[index];
     final width = MediaQuery.of(context).size.width;
-
     await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return SimpleDialog(
-            title: Text(_log.name),
-            titlePadding: const EdgeInsets.all(8),
-            insetPadding: const EdgeInsets.all(4),
-            children: [
-              Padding(
-                  padding: const EdgeInsets.all(6),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                          width: width - width / 5,
-                          child: lineItem(
-                              'Time: ',
-                              DateTime.fromMillisecondsSinceEpoch(_log.time)
-                                  .toIso8601String())),
-                      SizedBox(
-                          width: width - width / 5,
-                          child: lineItem(
-                              'Level: ', levelReverseMap[_log.level]!)),
-                      SizedBox(
-                          width: width - width / 5,
-                          child: lineItem('Message: ', _log.message)),
-                      SizedBox(
-                          width: width - width / 5,
-                          child: lineItem('Error: ', _log.error)),
-                      SizedBox(
-                          width: width - width / 5,
-                          child: lineItem('StackTrace: ', _log.stack)),
-                    ],
-                  ))
-            ],
-          );
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: Text(_log.name),
+          titlePadding: const EdgeInsets.all(8),
+          insetPadding: const EdgeInsets.all(4),
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(6),
+              child: Column(
+                children: [
+                  SizedBox(
+                      width: width - width / 5,
+                      child: lineItem(
+                          'Time: ',
+                          DateTime.fromMillisecondsSinceEpoch(_log.time)
+                              .toIso8601String())),
+                  SizedBox(
+                      width: width - width / 5,
+                      child: lineItem('Level: ', levelReverseMap[_log.level]!)),
+                  SizedBox(
+                      width: width - width / 5,
+                      child: lineItem('Message: ', _log.message)),
+                  SizedBox(
+                      width: width - width / 5,
+                      child: lineItem('Error: ', _log.error)),
+                  SizedBox(
+                      width: width - width / 5,
+                      child: lineItem('StackTrace: ', _log.stack)),
+                ],
+              ),
+            )
+          ],
+        );
+      },
+    );
   }
 }

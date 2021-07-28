@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:logging/logging.dart';
 
@@ -45,7 +43,7 @@ void main() {
     const message = 'Dune is the best SciFi Book!';
     final now = DateTime.now().millisecondsSinceEpoch;
     final id = await db.addLog(now, 'Name', message, Level.FINE.value, '', '');
-    final logList = await db.getLogById(id);
+    final logList = await db.getLogById(id, false);
     expect(logList[0].message, message);
   });
 
@@ -53,13 +51,13 @@ void main() {
     const message = 'Dune is the best SciFi Book!';
     final now = DateTime.now().millisecondsSinceEpoch;
     await db.addLog(now, 'Name', message, Level.FINE.value, '', '');
-    final logList = await db.getAllLogs;
+    final logList = await db.getAllLogs(false);
     expect(logList[0].message, message);
   });
 
   test('Delete all logs in Database', () async {
     await db.deleteAllLogs();
-    final result = await db.getAllLogs;
+    final result = await db.getAllLogs(false);
     expect(result.length, 0);
   });
 

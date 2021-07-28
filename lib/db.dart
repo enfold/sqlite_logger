@@ -40,30 +40,84 @@ class LogMessageDatabase extends _$LogMessageDatabase {
         _log.fine('executed PRAGMA statements');
       });
 
-  Future<List<LogMessage>> get getAllLogs => select(logMessageTable).get();
-
-  Future<List<LogMessage>> getLogById(int id) =>
-      (select(logMessageTable)..where((tbl) => tbl.id.equals(id))).get();
-
-  Future<List<LogMessage>> getLogsByName(String name) =>
-      (select(logMessageTable)..where((tbl) => tbl.name.equals(name))).get();
-
-  Future<List<LogMessage>> getLogsNameContains(String name) =>
-      (select(logMessageTable)..where((tbl) => tbl.name.contains(name))).get();
-
-  Future<List<LogMessage>> getLogsByLevel(int level) =>
-      (select(logMessageTable)..where((tbl) => tbl.level.equals(level))).get();
-
-  Future<List<LogMessage>> getLogsBefore(int time) => (select(logMessageTable)
-        ..where((tbl) => tbl.time.isSmallerThanValue(time)))
+  Future<List<LogMessage>> getAllLogs(bool reversed) => (select(logMessageTable)
+        ..orderBy([
+          (t) => OrderingTerm(
+              expression: t.id,
+              mode: reversed ? OrderingMode.desc : OrderingMode.asc)
+        ]))
       .get();
 
-  Future<List<LogMessage>> getLogsAfter(int time) => (select(logMessageTable)
-        ..where((tbl) => tbl.time.isBiggerThanValue(time)))
-      .get();
+  Future<List<LogMessage>> getLogById(int id, bool reversed) =>
+      (select(logMessageTable)
+            ..where((tbl) => tbl.id.equals(id))
+            ..orderBy([
+              (t) => OrderingTerm(
+                  expression: t.id,
+                  mode: reversed ? OrderingMode.desc : OrderingMode.asc)
+            ]))
+          .get();
 
-  Future<List<LogMessage>> getLogWhereMessageContains(String s) =>
-      (select(logMessageTable)..where((tbl) => tbl.message.contains(s))).get();
+  Future<List<LogMessage>> getLogsByName(String name, bool reversed) =>
+      (select(logMessageTable)
+            ..where((tbl) => tbl.name.equals(name))
+            ..orderBy([
+              (t) => OrderingTerm(
+                  expression: t.id,
+                  mode: reversed ? OrderingMode.desc : OrderingMode.asc)
+            ]))
+          .get();
+
+  Future<List<LogMessage>> getLogsNameContains(String name, bool reversed) =>
+      (select(logMessageTable)
+            ..where((tbl) => tbl.name.contains(name))
+            ..orderBy([
+              (t) => OrderingTerm(
+                  expression: t.id,
+                  mode: reversed ? OrderingMode.desc : OrderingMode.asc)
+            ]))
+          .get();
+
+  Future<List<LogMessage>> getLogsByLevel(int level, bool reversed) =>
+      (select(logMessageTable)
+            ..where((tbl) => tbl.level.equals(level))
+            ..orderBy([
+              (t) => OrderingTerm(
+                  expression: t.id,
+                  mode: reversed ? OrderingMode.desc : OrderingMode.asc)
+            ]))
+          .get();
+
+  Future<List<LogMessage>> getLogsBefore(int time, bool reversed) =>
+      (select(logMessageTable)
+            ..where((tbl) => tbl.time.isSmallerThanValue(time))
+            ..orderBy([
+              (t) => OrderingTerm(
+                  expression: t.id,
+                  mode: reversed ? OrderingMode.desc : OrderingMode.asc)
+            ]))
+          .get();
+
+  Future<List<LogMessage>> getLogsAfter(int time, bool reversed) =>
+      (select(logMessageTable)
+            ..where((tbl) => tbl.time.isBiggerThanValue(time))
+            ..orderBy([
+              (t) => OrderingTerm(
+                  expression: t.id,
+                  mode: reversed ? OrderingMode.desc : OrderingMode.asc)
+            ]))
+          .get();
+
+  Future<List<LogMessage>> getLogWhereMessageContains(
+          String s, bool reversed) =>
+      (select(logMessageTable)
+            ..where((tbl) => tbl.message.contains(s))
+            ..orderBy([
+              (t) => OrderingTerm(
+                  expression: t.id,
+                  mode: reversed ? OrderingMode.desc : OrderingMode.asc)
+            ]))
+          .get();
 
   Future<int> addLog(int time, String name, String message, int level,
       String error, String stack) {

@@ -61,33 +61,42 @@ class LogManager {
   Future<void> deleteLogsBefore(DateTime time) =>
       _getDBInstance().deleteBefore(time.millisecondsSinceEpoch);
 
-  Future<List<LogMessage>> getAllLogs() => _getDBInstance().getAllLogs;
+  Future<List<LogMessage>> getAllLogs({bool reversed = false}) =>
+      _getDBInstance().getAllLogs(reversed);
 
   LogMessageDatabase _getDBInstance() {
     return _db == null ? throw DatabaseConnectionException() : _db!;
   }
 
-  Future<List<LogMessage>> getLogById(int id) =>
-      _getDBInstance().getLogById(id);
+  Future<List<LogMessage>> getLogById(int id, {bool reversed = false}) =>
+      _getDBInstance().getLogById(id, reversed);
 
   //This returns null if you pass it an empty string
-  Future<List<LogMessage>>? getLogWhereMessageContains(String s) =>
-      s.isNotEmpty ? _getDBInstance().getLogWhereMessageContains(s) : null;
+  Future<List<LogMessage>>? getLogWhereMessageContains(String s,
+          {bool reversed = false}) =>
+      s.isNotEmpty
+          ? _getDBInstance().getLogWhereMessageContains(s, reversed)
+          : null;
 
-  Future<List<LogMessage>> getLogsAfter(DateTime dateTime) =>
-      _getDBInstance().getLogsAfter(dateTime.millisecondsSinceEpoch);
+  Future<List<LogMessage>> getLogsAfter(DateTime dateTime,
+          {bool reversed = false}) =>
+      _getDBInstance().getLogsAfter(dateTime.millisecondsSinceEpoch, reversed);
 
-  Future<List<LogMessage>> getLogsBefore(DateTime dateTime) =>
-      _getDBInstance().getLogsBefore(dateTime.millisecondsSinceEpoch);
+  Future<List<LogMessage>> getLogsBefore(DateTime dateTime,
+          {bool reversed = false}) =>
+      _getDBInstance().getLogsBefore(dateTime.millisecondsSinceEpoch, reversed);
 
-  Future<List<LogMessage>> getLogsByLevel(Level level) =>
-      _getDBInstance().getLogsByLevel(level.value);
+  Future<List<LogMessage>> getLogsByLevel(Level level,
+          {bool reversed = false}) =>
+      _getDBInstance().getLogsByLevel(level.value, reversed);
 
-  Future<List<LogMessage>> getLogsByName(String name) =>
-      _getDBInstance().getLogsByName(name);
+  Future<List<LogMessage>> getLogsByName(String name,
+          {bool reversed = false}) =>
+      _getDBInstance().getLogsByName(name, reversed);
 
-  Future<List<LogMessage>> getLogsNameContains(String s) =>
-      _getDBInstance().getLogsNameContains(s);
+  Future<List<LogMessage>> getLogsNameContains(String s,
+          {bool reversed = false}) =>
+      _getDBInstance().getLogsNameContains(s, reversed);
 
   Future<void> truncateLogs(Duration duration) {
     if (_db == null) {
