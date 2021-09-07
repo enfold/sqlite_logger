@@ -37,6 +37,7 @@ class LogMessageDatabase extends _$LogMessageDatabase {
   static VmDatabase _initDb(File file) => VmDatabase(file, setup: (db) {
         db.execute('PRAGMA sync = false');
         db.execute('PRAGMA journal_mode = WAL');
+        db.execute('PRAGMA busy_timeout = 250');
         _log.fine('executed PRAGMA statements');
       });
 
