@@ -37,6 +37,7 @@ void main() {
     logger.log(Level.ALL, message);
     final logList = await logManger.getLogsByName(logName);
     final result = logList.where((log) => log.message.compareTo(message) == 0);
+    await logManger.stop();
     expect(result.length, 1);
   });
   test('Add log to Database', () async {
