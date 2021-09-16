@@ -121,7 +121,7 @@ class LogMessageDatabase extends _$LogMessageDatabase {
           .get();
 
   Future<int> addLog(int time, String name, String message, int level,
-      String error, String stack) {
+      String error, String stack) async {
     var entry = LogMessageTableCompanion.insert(
         time: time,
         name: name,
@@ -129,7 +129,7 @@ class LogMessageDatabase extends _$LogMessageDatabase {
         level: level,
         error: error,
         stack: stack);
-    return into(logMessageTable).insert(entry);
+    return await into(logMessageTable).insert(entry);
   }
 
   List<Future<int>> addAllLogs(List<LogMessage> logList) =>

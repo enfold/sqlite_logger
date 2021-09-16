@@ -36,6 +36,7 @@ class LogManager {
     if (_db == null) {
       throw DatabaseConnectionException();
     }
+
     _sub = Logger.root.onRecord.asyncMap((e) => addLog(e)).listen((_) {});
     _log.info('Logger added Listener');
   }
