@@ -45,6 +45,11 @@ class LogManager {
     await _sub?.cancel();
   }
 
+  Future<void> shutDown() async {
+    await stop();
+    await _db?.close();
+  }
+
   Future<void> addLog(LogRecord log) => _getDBInstance().addLog(
         log.time.millisecondsSinceEpoch,
         log.loggerName,
