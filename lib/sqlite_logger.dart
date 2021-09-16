@@ -11,7 +11,7 @@ class LogManager {
 
   LogMessageDatabase? _db;
   final _log = Logger('$LogManager');
-  StreamSubscription<LogRecord>? _sub;
+  StreamSubscription<void>? _sub;
 
   //This class requires you call the connect() method before using any other functionality
   factory LogManager() {
@@ -36,15 +36,19 @@ class LogManager {
     if (_db == null) {
       throw DatabaseConnectionException();
     }
-    _sub = Logger.root.onRecord.listen((event) async {
-      await addLog(event);
-    });
+
+    _sub = Logger.root.onRecord.asyncMap((e) => addLog(e)).listen((_) {});
     _log.info('Logger added Listener');
   }
 
   //Unsubscribes from the log Stream. Make sure to call when you're dont listening for logs.
   Future<void> stop() async {
     await _sub?.cancel();
+  }
+
+  Future<void> shutDown() async {
+    await stop();
+    await _db?.close();
   }
 
   Future<void> addLog(LogRecord log) => _getDBInstance().addLog(
